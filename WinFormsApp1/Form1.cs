@@ -1,9 +1,5 @@
-using PdfSharp;
-using TheArtOfDev.HtmlRenderer.PdfSharp;
-using iText;
 using iText.Html2pdf;
-using System.Web;
-using System.Text.RegularExpressions;
+using HtmlAgilityPack;
 
 namespace WinFormsApp1
 {
@@ -37,15 +33,14 @@ namespace WinFormsApp1
 
             string html = File.ReadAllText("template.html");
 
-            File.WriteAllText("temp.html", html);
+            html = html.Replace("<<[Model]>>", canLogInfo.Model).Replace("<<[Module]>>", canLogInfo.Module)
+            .Replace("<<[Year]>>", canLogInfo.Year)
+            .Replace("<<[Rev]>>", canLogInfo.Rev)
+            .Replace("<<[Version]>>", canLogInfo.Version)
+            .Replace("<<[ProgramN]>>", canLogInfo.ProgramN)
+            .Replace("<<[Date]>>", canLogInfo.Date);
 
-            html.Replace("<<[Model]>>", canLogInfo.Model);
-            html.Replace("<<[Module]>>", canLogInfo.Module);
-            html.Replace("<<[Year]>>", canLogInfo.Year);
-            html.Replace("<<[Rev]>>", canLogInfo.Rev);
-            html.Replace("<<[Version]>>", canLogInfo.Version);
-            html.Replace("<<[ProgramN]>>", canLogInfo.ProgramN);
-            html.Replace("<<[Date]>>", canLogInfo.Date);
+            File.WriteAllText("temp.html", html);
 
 
             HtmlConverter.ConvertToPdf(html, new FileStream("output.pdf", FileMode.Create));
