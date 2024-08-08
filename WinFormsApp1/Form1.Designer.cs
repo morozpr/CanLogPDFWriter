@@ -52,6 +52,10 @@
             dataGridView1 = new DataGridView();
             flagName = new DataGridViewTextBoxColumn();
             flagStatus = new DataGridViewCheckBoxColumn();
+            openFileDialog1 = new OpenFileDialog();
+            label10 = new Label();
+            label11 = new Label();
+            loadIMGBtn = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
@@ -256,11 +260,46 @@
             flagStatus.Name = "flagStatus";
             flagStatus.Width = 125;
             // 
+            // openFileDialog1
+            // 
+            openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(192, 248);
+            label10.Name = "label10";
+            label10.Size = new Size(203, 20);
+            label10.TabIndex = 20;
+            label10.Text = "Загруженные изображения";
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(192, 285);
+            label11.Name = "label11";
+            label11.Size = new Size(58, 20);
+            label11.TabIndex = 21;
+            label11.Text = "label11";
+            // 
+            // loadIMGBtn
+            // 
+            loadIMGBtn.Location = new Point(401, 248);
+            loadIMGBtn.Name = "loadIMGBtn";
+            loadIMGBtn.Size = new Size(94, 29);
+            loadIMGBtn.TabIndex = 22;
+            loadIMGBtn.Text = "Загрузить";
+            loadIMGBtn.UseVisualStyleBackColor = true;
+            loadIMGBtn.Click += loadIMGBtn_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1128, 578);
+            Controls.Add(loadIMGBtn);
+            Controls.Add(label11);
+            Controls.Add(label10);
             Controls.Add(clearBtn);
             Controls.Add(saveButton);
             Controls.Add(label9);
@@ -315,5 +354,9 @@
         private DataGridView dataGridView1;
         private DataGridViewTextBoxColumn flagName;
         private DataGridViewCheckBoxColumn flagStatus;
+        private OpenFileDialog openFileDialog1;
+        private Label label10;
+        private Label label11;
+        private Button loadIMGBtn;
     }
 }

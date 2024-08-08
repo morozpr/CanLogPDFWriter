@@ -1,5 +1,6 @@
 using iText.Html2pdf;
 using HtmlAgilityPack;
+using System.Diagnostics;
 
 namespace WinFormsApp1
 {
@@ -7,7 +8,6 @@ namespace WinFormsApp1
     {
         public Form1()
         {
-
             InitializeComponent();
         }
 
@@ -18,7 +18,12 @@ namespace WinFormsApp1
 
         public void genPDF()
         {
-            string dataDir = Directory.GetCurrentDirectory();
+            string dataDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "CanLogPDFWriter");
+
+            if (!Directory.Exists(dataDir))
+            {
+                Directory.CreateDirectory(dataDir);
+            }
 
 
             CanLogInfo canLogInfo = new CanLogInfo();
@@ -29,8 +34,9 @@ namespace WinFormsApp1
             canLogInfo.Rev = textBox4.Text;
             canLogInfo.Version = textBox5.Text;
             canLogInfo.ProgramN = textBox6.Text;
-            canLogInfo.Date = dateTimePicker1.Text;
+            canLogInfo.Date = dateTimePicker1.Value.ToShortDateString();
 
+            string fileName = $"{canLogInfo.Module}_{canLogInfo.Model}_{canLogInfo.Year}_{canLogInfo.Version}_{canLogInfo.Rev}_{canLogInfo.Date}.pdf"; // ƒŒƒ≈À¿“‹
             string html = File.ReadAllText("template.html");
 
             html = html.Replace("<<[Model]>>", canLogInfo.Model).Replace("<<[Module]>>", canLogInfo.Module)
@@ -40,10 +46,7 @@ namespace WinFormsApp1
             .Replace("<<[ProgramN]>>", canLogInfo.ProgramN)
             .Replace("<<[Date]>>", canLogInfo.Date);
 
-            File.WriteAllText("temp.html", html);
-
-
-            HtmlConverter.ConvertToPdf(html, new FileStream("output.pdf", FileMode.Create));
+            HtmlConverter.ConvertToPdf(html, new FileStream(Path.Combine(dataDir, fileName), FileMode.Create));
 
         }
 
@@ -56,6 +59,18 @@ namespace WinFormsApp1
             textBox5.Text = string.Empty;
             textBox6.Text = string.Empty;
             dateTimePicker1.ResetText();
+        }
+
+        private void loadIMGBtn_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                using Image img = Image.FromFile(openFileDialog1.FileName);
+                using MemoryStream ms = new MemoryStream();
+                img.Save(ms, img.RawFormat);
+                byte[] data = ms.ToArray();
+
+            }
         }
     }
 }
