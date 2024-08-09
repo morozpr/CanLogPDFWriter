@@ -1,14 +1,25 @@
 using iText.Html2pdf;
 using HtmlAgilityPack;
 using System.Diagnostics;
+using static WinFormsApp1.Data;
 
 namespace WinFormsApp1
 {
     public partial class Form1 : Form
     {
+        public string[]? imgArray;
+
+        public string[]? imgsHTML;
+
+
         public Form1()
         {
             InitializeComponent();
+
+            openFileDialog1.Multiselect = true;
+            openFileDialog1.RestoreDirectory = true;
+            openFileDialog1.CheckFileExists = true;
+            openFileDialog1.CheckPathExists = true;
         }
 
         private void saveButton_Click(object sender, EventArgs e)
@@ -59,18 +70,33 @@ namespace WinFormsApp1
             textBox5.Text = string.Empty;
             textBox6.Text = string.Empty;
             dateTimePicker1.ResetText();
+            imgArray = [];
         }
 
         private void loadIMGBtn_Click(object sender, EventArgs e)
         {
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                using Image img = Image.FromFile(openFileDialog1.FileName);
-                using MemoryStream ms = new MemoryStream();
-                img.Save(ms, img.RawFormat);
-                byte[] data = ms.ToArray();
+            if (openFileDialog1.ShowDialog() == DialogResult.OK) 
+            { 
+                foreach (var file in openFileDialog1.FileNames) 
+                {
+                    ImgsByte item = new()
+                    {
+                        FileByte = File.ReadAllBytes(file),
+                        FilePath = file
+                    };
 
+                    using Image img = Image.FromFile(file);
+                    using MemoryStream ms = new MemoryStream();
+                    img.Save(ms, img.RawFormat);
+                    byte[] bytes = ms.ToArray();
+                    
+
+                    imgsHTML.Append("data:image/" + Path.GetExtension(item.FilePath).TrimStart('.') + ";base64," + Convert.ToBase64String(bytes));
+                }
             }
+            
+            //foreach (var file in imgArray) { label11.Text = string.Join(" ", file); }
+
         }
     }
 }

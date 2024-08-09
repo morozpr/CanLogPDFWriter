@@ -19,5 +19,12 @@ namespace WinFormsApp1
             public string? Name { get; set; }
             public bool Status { get; set; }
         }
+
+        public class ImgsByte
+        { 
+            public string? FilePath{ get; set;}
+            public byte[]? FileByte{ get; set;}
+        }
+
     }
 }
