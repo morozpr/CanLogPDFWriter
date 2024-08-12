@@ -25,6 +25,5 @@ namespace WinFormsApp1
             public string? FilePath{ get; set;}
             public byte[]? FileByte{ get; set;}
         }
-
     }
 }

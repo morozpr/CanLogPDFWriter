@@ -2,16 +2,13 @@ using iText.Html2pdf;
 using HtmlAgilityPack;
 using System.Diagnostics;
 using static WinFormsApp1.Data;
+using Org.BouncyCastle.Utilities;
 
 namespace WinFormsApp1
 {
     public partial class Form1 : Form
     {
-        public string[]? imgArray;
-
-        public string[]? imgsHTML;
-
-
+        List<string> HTMLimgsList = new List<string>();
         public Form1()
         {
             InitializeComponent();
@@ -58,8 +55,8 @@ namespace WinFormsApp1
             .Replace("<<[Date]>>", canLogInfo.Date);
 
             HtmlConverter.ConvertToPdf(html, new FileStream(Path.Combine(dataDir, fileName), FileMode.Create));
-
         }
+
 
         private void clearBtn_Click(object sender, EventArgs e)
         {
@@ -70,14 +67,13 @@ namespace WinFormsApp1
             textBox5.Text = string.Empty;
             textBox6.Text = string.Empty;
             dateTimePicker1.ResetText();
-            imgArray = [];
         }
 
         private void loadIMGBtn_Click(object sender, EventArgs e)
         {
-            if (openFileDialog1.ShowDialog() == DialogResult.OK) 
-            { 
-                foreach (var file in openFileDialog1.FileNames) 
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                foreach (var file in openFileDialog1.FileNames)
                 {
                     ImgsByte item = new()
                     {
@@ -89,14 +85,15 @@ namespace WinFormsApp1
                     using MemoryStream ms = new MemoryStream();
                     img.Save(ms, img.RawFormat);
                     byte[] bytes = ms.ToArray();
-                    
 
-                    imgsHTML.Append("data:image/" + Path.GetExtension(item.FilePath).TrimStart('.') + ";base64," + Convert.ToBase64String(bytes));
+                    HTMLimgsList.Add(getHTMLPhotoString(file, bytes));
                 }
             }
-            
-            //foreach (var file in imgArray) { label11.Text = string.Join(" ", file); }
+        }
 
+        private string getHTMLPhotoString(string path ,byte[] data)
+        {
+            return("data:image/" + Path.GetExtension(path).TrimStart('.') + ";base64," + Convert.ToBase64String(data));
         }
     }
 }
